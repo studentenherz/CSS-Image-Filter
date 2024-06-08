@@ -1,0 +1,33 @@
+#root {
+  width: 100%;
+  padding: 2rem;
+  text-align: center;
+
+}
+
+#filter {
+	border: 1px solid #888;
+	padding: 2em;
+	max-height: 300px;
+	text-wrap: wrap;
+	text-align: left;
+}
+
+body {
+	background-color: var(--neutral-color-2);
+	color: var(--neutral-color-4);
+	font-family:Verdana, Geneva, Tahoma, sans-serif;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+}
+
+main {
+	display: grid;
+	width: 80%;
+	grid-template-columns: 1fr 1fr;
+}
+
+.images {
+	display: flex;
+}
