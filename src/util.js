@@ -34,42 +34,18 @@ function transpose(matrix) {
 }
 
 function calculateSVD(A) {
-  const T = A.length < A[0].length
-  if (T) {
-    A = transpose(A)
-  }
+  A = transpose(A)
 
   let { u, q, v } = SVD(A, 'f')
-  console.log('========= U de la mata =============')
-  print(u)
-  console.log('========= U_t de la mata =============')
-  print(transpose(u))
-  if (T) {
-    const realV = transpose(u)
-    u = transpose(v)
-    v = realV
-  }
+  const realV = transpose(u)
+  u = transpose(v)
+  v = realV
 
   return { u, q, v }
 }
 
-function print(A) {
-  let a = '[\n'
-  for (let i = 0; i < A.length; i++) {
-    a += `[${A[i].join(', ')}]\n`
-  }
-  a += ']'
-  console.log(a)
-}
-
 function solve({ A, b }) {
   const { u, q, v: v_t } = calculateSVD(A)
-  console.log('A')
-  print(A)
-  console.log('v_t')
-  print(v_t)
-  console.log('u')
-  print(u)
 
   let qub = []
 
@@ -84,12 +60,6 @@ function solve({ A, b }) {
 
     qub.push(s)
   })
-
-  console.log('q', q)
-  console.log('b')
-  console.log(b)
-  console.log('qub')
-  console.log('qub', qub)
 
   let ans = []
   for (let i = 0; i < v_t[0].length; i++) {
@@ -108,9 +78,6 @@ function solve({ A, b }) {
     }
   }
 
-  console.log('ans\n', ans.join(' '))
-  console.log(nullspace)
-
   let bb = []
   for (let i = 0; i < A.length; i++) {
     let s = 0
@@ -119,9 +86,6 @@ function solve({ A, b }) {
     }
     bb.push(s)
   }
-
-  console.log('==========A * ans ===============')
-  console.log(bb)
 
   return { ans, nullspace }
 }
@@ -151,11 +115,6 @@ export function calculateMatrix(colors) {
       A = [...A, newRow]
     }
   })
-
-  console.log('A')
-  console.log(A)
-  console.log('b')
-  console.log(b)
 
   return solve({ A, b })
 }
