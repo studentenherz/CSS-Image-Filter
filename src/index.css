@@ -1,8 +1,9 @@
 * {
-	--main-color: #097692;
-	--accent-color: #922509;
-	--neutral-color-1: #3d565c;
-	--neutral-color-2: hsl(192, 3%, 15%);
-	--neutral-color-3: #1497b8;
-	--neutral-color-4: #d1f2fa;
+  --main-color: #097692;
+  --accent-color: #922509;
+  --neutral-color-1: #3d565c;
+  --neutral-color-2: #252727;
+  --neutral-color-3: #1497b8;
+  --neutral-color-4: #d1f2fa;
+  box-sizing: border-box;
 }

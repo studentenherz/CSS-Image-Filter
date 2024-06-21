@@ -5,31 +5,22 @@ import { calculateMatrix } from './util'
 const TEMPLATE = `url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"><defs><filter id="background_color_filter" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="{}"/></filter></defs></svg>#background_color_filter')`
 
 function App() {
-  const [colors, setColors] = useState([])
+  const [colors, setColors] = useState([
+    { from: '#ffffff', to: '#252727', id: 0, active: true },
+    { from: '#000000', to: '#d1f2fa', id: 1, active: true },
+    { from: '#ff0000', to: '#ff0000', id: 2, active: true },
+    { from: '#00ff00', to: '#00ff00', id: 3, active: true },
+    // { from: '#00ffff', to: '#00ffff', id: 4, active: false },
+  ])
   const [filter, setFilter] = useState(TEMPLATE)
   const [nullspace, setNullspace] = useState([])
   const [ans, setAns] = useState([])
-
-  const addColorMapping = (event) => {
-    event.preventDefault()
-
-    let next_id = 0
-    colors.forEach(({ id }) => {
-      if (id >= next_id) {
-        next_id = id + 1
-      }
-    })
-
-    setColors((prevColors) => [
-      ...prevColors,
-      { from: '#ffffff', to: '#ffffff', id: next_id },
-    ])
-  }
+  const [replaceQuotes, setReplaceQuotes] = useState(false)
 
   useEffect(() => {
     console.log(colors)
     if (colors.length > 0) {
-      const { ans, nullspace } = calculateMatrix(colors)
+      const { ans, nullspace } = calculateMatrix(colors.filter((x) => x.active))
       setAns(ans)
       setNullspace(nullspace)
     }
@@ -53,10 +44,6 @@ function App() {
     setFilter(TEMPLATE.replace('{}', ans.length > 0 ? ans.join(' ') : '{}'))
   }, [ans])
 
-  const removeColorMappingGenerator = (idx) => () => {
-    setColors((initial) => initial.filter(({ id }) => id != idx))
-  }
-
   const onChangeFromColorGenerator = (idx) => (event) => {
     setColors((initial) =>
       initial.map((x) => (x.id != idx ? x : { ...x, from: event.target.value }))
@@ -73,48 +60,56 @@ function App() {
     <>
       <h1>CSS Image Filter</h1>
       <main>
-        <section>
+        <section className="images">
           <aside>
-            <button disabled={colors.length >= 5} onClick={addColorMapping}>
-              Add New Color Mapping
-            </button>
-            {colors.map(({ from, to, id }) => (
-              <div key={id}>
+            <h2>Original</h2>
+            <img
+              src="https://imgs.xkcd.com/comics/automation.png"
+              alt="test image"
+            />
+          </aside>
+          <aside>
+            {colors.map(({ from, to, id, active }) => (
+              <div className="colormap" key={id}>
                 <input
                   onChange={onChangeFromColorGenerator(id)}
                   type="color"
                   value={from}
+                  disabled={!active}
                 />
+
+                {active ? '→ ' : 'x'}
                 <input
                   onChange={onChangeToColorGenerator(id)}
                   type="color"
+                  disabled={!active}
                   value={to}
                 />
-                <button onClick={removeColorMappingGenerator(id)}>
-                  Remove Color Mapping
-                </button>
               </div>
             ))}
-          </aside>
-        </section>
-        <button onClick={newFilter}>New combination</button>
-        <section className="images">
-          <aside>
-            <h2>Original</h2>
-            <img src="/test.svg" alt="test image" />
           </aside>
           <aside>
             <h2>Filtered</h2>
             <img
               style={{ filter: filter }}
-              src="/test.svg"
+              src="https://imgs.xkcd.com/comics/automation.png"
               alt="filtered test image"
             />
           </aside>
         </section>
-        <aside>
-          <pre id="filter">{filter.replaceAll('"', '&quot;')}</pre>
-        </aside>
+        <section>
+          <pre id="filter">
+            {replaceQuotes ? filter.replaceAll('"', '&quot;') : filter}
+          </pre>
+          <button onClick={newFilter}>New combination</button>
+          <button
+            onClick={() => {
+              setReplaceQuotes(!replaceQuotes)
+            }}
+          >
+            {`Toggle "" and &quot;`}
+          </button>
+        </section>
       </main>
     </>
   )
