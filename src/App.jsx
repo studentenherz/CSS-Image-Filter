@@ -16,6 +16,9 @@ function App() {
   const [nullspace, setNullspace] = useState([])
   const [ans, setAns] = useState([])
   const [replaceQuotes, setReplaceQuotes] = useState(false)
+  const [imgSrc, setImgSrc] = useState(
+    'https://imgs.xkcd.com/comics/automation.png'
+  )
 
   useEffect(() => {
     console.log(colors)
@@ -63,10 +66,16 @@ function App() {
         <section className="images">
           <aside>
             <h2>Original</h2>
-            <img
-              src="https://imgs.xkcd.com/comics/automation.png"
-              alt="test image"
-            />
+            <section>
+              <label htmlFor="image-src">...or try on your own image </label>
+              <input
+                name="image-src"
+                type="text"
+                placeholder="url"
+                onChange={(e) => setImgSrc(e.target.value)}
+              />
+            </section>
+            <img src={imgSrc} alt="test image" />
           </aside>
           <aside>
             {colors.map(({ from, to, id, active }) => (
@@ -92,7 +101,7 @@ function App() {
             <h2>Filtered</h2>
             <img
               style={{ filter: filter }}
-              src="https://imgs.xkcd.com/comics/automation.png"
+              src={imgSrc}
               alt="filtered test image"
             />
           </aside>
