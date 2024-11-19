@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import { calculateMatrix } from './util'
 
-const TEMPLATE = `url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"><defs><filter id="background_color_filter" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="{}"/></filter></defs></svg>#background_color_filter')`
+const TEMPLATE = `url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"><defs><filter id="background_color_filter" color-interpolation-filters="sRGB" x="0%" y="0%" width="100%" height="100%"><feColorMatrix type="matrix" values="{}"/></filter></defs></svg>#background_color_filter')`
 
 function App() {
   const [colors, setColors] = useState([
